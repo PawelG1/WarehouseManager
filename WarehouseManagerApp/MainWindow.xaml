@@ -1,12 +1,235 @@
-﻿<Window x:Class="WarehouseManagerApp.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:WarehouseManagerApp"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+﻿<Window
+    x:Class="WarehouseManagerApp.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:WarehouseManagerApp"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="MainWindow"
+    Width="800"
+    Height="450"
+    mc:Ignorable="d">
 
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="220" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <!--  Panel boczny - menu  -->
+        <Border
+            Grid.Column="0"
+            Background="#2C3E50"
+            BorderBrush="#34495E"
+            BorderThickness="0,0,1,0">
+            <StackPanel Margin="10">
+                <TextBlock
+                    Margin="10,20,10,30"
+                    FontSize="20"
+                    FontWeight="Bold"
+                    Foreground="White"
+                    Text="MENU" />
+
+                <Button
+                    x:Name="btnWarehouses"
+                    Height="50"
+                    Margin="5"
+                    Background="#34495E"
+                    BorderThickness="0"
+                    Click="BtnWarehouses_Click"
+                    Content="📦 Magazyny"
+                    Cursor="Hand"
+                    FontSize="14"
+                    Foreground="White" />
+
+                <Button
+                    x:Name="BtnProducts"
+                    Height="50"
+                    Margin="5"
+                    Background="#34495E"
+                    BorderThickness="0"
+                    Click="BtnProducts_Click"
+                    Content="📋 Produkty"
+                    Cursor="Hand"
+                    FontSize="14"
+                    Foreground="White" />
+
+                <Button
+                    x:Name="btnAddWarehouses"
+                    Height="50"
+                    Margin="5,30,5,5"
+                    Background="#27AE60"
+                    BorderThickness="0"
+                    Click="BtnAddWarehouse_Click"
+                    Content="➕ Dodaj Magazyn"
+                    Cursor="Hand"
+                    FontSize="14"
+                    Foreground="White" />
+
+                <Button
+                    x:Name="btnAddProduct"
+                    Height="50"
+                    Margin="5"
+                    Background="#27AE60"
+                    BorderThickness="0"
+                    Click="BtnAddProduct_Click"
+                    Content="➕ Dodaj Produkt"
+                    Cursor="Hand"
+                    FontSize="14"
+                    Foreground="White" />
+
+                <Button
+                    x:Name="btnRefresh"
+                    Height="50"
+                    Margin="5,30,5,5"
+                    Background="#3498DB"
+                    BorderThickness="0"
+                    Click="BtnRefresh_Click"
+                    Content="🔄 Odśwież"
+                    Cursor="Hand"
+                    FontSize="14"
+                    Foreground="White" />
+            </StackPanel>
+        </Border>
+
+        <!--  Główna zawartość  -->
+        <Grid Grid.Column="1" Margin="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <!--  Nagłówek  -->
+            <TextBlock
+                x:Name="txtNaglowek"
+                Grid.Row="0"
+                Margin="0,0,0,10"
+                FontSize="28"
+                FontWeight="Bold"
+                Foreground="#2C3E50"
+                Text="Lista Produktów" />
+
+            <!--  Statystyki  -->
+            <StackPanel
+                Grid.Row="1"
+                Margin="0,0,0,15"
+                Orientation="Horizontal">
+                <Border
+                    Margin="0,0,10,0"
+                    Padding="15,10"
+                    Background="#3498DB"
+                    CornerRadius="5">
+                    <StackPanel>
+                        <TextBlock
+                            FontSize="12"
+                            Foreground="White"
+                            Text="Liczba produktów" />
+                        <TextBlock
+                            x:Name="txtLiczbaProdukty"
+                            FontSize="20"
+                            FontWeight="Bold"
+                            Foreground="White"
+                            Text="0" />
+                    </StackPanel>
+                </Border>
+
+                <Border
+                    Margin="0,0,10,0"
+                    Padding="15,10"
+                    Background="#27AE60"
+                    CornerRadius="5">
+                    <StackPanel>
+                        <TextBlock
+                            FontSize="12"
+                            Foreground="White"
+                            Text="Liczba magazynów" />
+                        <TextBlock
+                            x:Name="txtLiczbaMagazyny"
+                            FontSize="20"
+                            FontWeight="Bold"
+                            Foreground="White"
+                            Text="0" />
+                    </StackPanel>
+                </Border>
+
+                <Border
+                    Padding="15,10"
+                    Background="#E67E22"
+                    CornerRadius="5">
+                    <StackPanel>
+                        <TextBlock
+                            FontSize="12"
+                            Foreground="White"
+                            Text="Całkowita wartość" />
+                        <TextBlock
+                            x:Name="txtWartosc"
+                            FontSize="20"
+                            FontWeight="Bold"
+                            Foreground="White"
+                            Text="0 zł" />
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+
+            <!--  DataGrid z produktami  -->
+            <DataGrid
+                x:Name="dgDane"
+                Grid.Row="2"
+                AlternatingRowBackground="#F8F9FA"
+                AutoGenerateColumns="False"
+                CanUserAddRows="False"
+                FontSize="13"
+                GridLinesVisibility="Horizontal"
+                HeadersVisibility="Column"
+                IsReadOnly="True"
+                RowHeight="35"
+                SelectionMode="Single">
+                <DataGrid.Columns>
+                    <DataGridTextColumn
+                        Width="50"
+                        Binding="{Binding Id}"
+                        Header="ID" />
+                    <DataGridTextColumn
+                        Width="*"
+                        Binding="{Binding Name}"
+                        Header="Nazwa" />
+                    <DataGridTextColumn
+                        Width="120"
+                        Binding="{Binding SKU}"
+                        Header="Kod" />
+                    <DataGridTextColumn
+                        Width="80"
+                        Binding="{Binding Quantity}"
+                        Header="Ilość" />
+                    <DataGridTextColumn
+                        Width="150"
+                        Binding="{Binding Warehouse.Name}"
+                        Header="Magazyn" />
+
+                </DataGrid.Columns>
+            </DataGrid>
+
+            <!--  Przyciski akcji  -->
+            <StackPanel
+                Grid.Row="3"
+                Margin="0,15,0,0"
+                HorizontalAlignment="Right"
+                Orientation="Horizontal">
+                <Button
+                    x:Name="btnRemove"
+                    Width="150"
+                    Height="40"
+                    Background="#E74C3C"
+                    BorderThickness="0"
+                    Click="BtnRemove_Click"
+                    Content="🗑️ Usuń wybrany"
+                    Cursor="Hand"
+                    FontSize="14"
+                    Foreground="White" />
+            </StackPanel>
+        </Grid>
     </Grid>
+
 </Window>
