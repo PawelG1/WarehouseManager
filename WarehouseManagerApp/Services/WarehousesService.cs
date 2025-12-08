@@ -10,7 +10,7 @@ using WarehouseManagerApp.Models;
 
 namespace WarehouseManagerApp.Services
 {
-    class WarehousesService : IWarehouseService
+    public class WarehousesService : IWarehouseService
     {
         private readonly WarehouseContext _context;
 
@@ -81,11 +81,14 @@ namespace WarehouseManagerApp.Services
 
         public async Task DeleteProductAsync(int id)
         {
-            await _context.Products
-                .Include(p => p.Warehouse)
-                .Where(x => x.Id == id)
-                .ExecuteDeleteAsync();
-            //TODO: Check if works
+            var productToBeDeleted = await _context.Products
+                .FirstOrDefaultAsync(p => p.Id == id);
+
+            if (productToBeDeleted != null)
+            {
+                _context.Products.Remove(productToBeDeleted);
+                await _context.SaveChangesAsync();
+            }
         }
 
         public async Task<Product?> GetProductByIdAsync(int id)
