@@ -2,6 +2,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using WarehouseManagerApp.Models;
 using WarehouseManagerApp.Services;
@@ -64,7 +65,7 @@ namespace WarehouseManagerApp.ViewModels
             {
                 //load warehouses
                 Warehouses = await _warehouseService.GetWarehousesAsync();
-                
+
                 //load product data
                 var product = await _warehouseService.GetProductByIdAsync(_productId);
                 if (product != null)
@@ -97,24 +98,24 @@ namespace WarehouseManagerApp.ViewModels
         {
             ClearMessages();
 
-            //validation
-            if (string.IsNullOrWhiteSpace(Name))
+            //create product object for validation
+            var product = new Product
             {
-                ValidationError = "Product name is required.";
-                HasValidationError = true;
-                return;
-            }
+                Id = _productId,
+                Name = Name,
+                SKU = Sku,
+                Quantity = Quantity,
+                minimumQuantity = MinimumQuantity,
+                WarehouseId = SelectedWarehouseId
+            };
 
-            if (string.IsNullOrWhiteSpace(Sku))
+            //validate using data annotations
+            var validationContext = new System.ComponentModel.DataAnnotations.ValidationContext(product);
+            var validationResults = new List<System.ComponentModel.DataAnnotations.ValidationResult>();
+            
+            if (!System.ComponentModel.DataAnnotations.Validator.TryValidateObject(product, validationContext, validationResults, true))
             {
-                ValidationError = "SKU is required.";
-                HasValidationError = true;
-                return;
-            }
-
-            if (SelectedWarehouseId == 0)
-            {
-                ValidationError = "Please select a warehouse.";
+                ValidationError = string.Join("\n", validationResults.Select(vr => vr.ErrorMessage));
                 HasValidationError = true;
                 return;
             }
@@ -122,18 +123,8 @@ namespace WarehouseManagerApp.ViewModels
             IsLoading = true;
             try
             {
-                var product = new Product
-                {
-                    Id = _productId,
-                    Name = Name,
-                    SKU = Sku,
-                    Quantity = Quantity,
-                    minimumQuantity = MinimumQuantity,
-                    WarehouseId = SelectedWarehouseId
-                };
-
                 await _warehouseService.UpdateProductAsync(product);
-                
+
                 OnProductUpdated?.Invoke();
             }
             catch (Exception ex)
