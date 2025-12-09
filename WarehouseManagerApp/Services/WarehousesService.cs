@@ -189,11 +189,13 @@ namespace WarehouseManagerApp.Services
         }
 
 
-        public Task UpdateProductAsync(Product product)
+        public async Task UpdateProductAsync(Product product)
         {
-            throw new NotImplementedException();
-            //_productsCache = null;
-            //_productsCacheTime = null;
+            _context.Products.Update(product);
+            await _context.SaveChangesAsync();
+            
+            _productsCache = null;
+            _productsCacheTime = null;
         }
     }
 }

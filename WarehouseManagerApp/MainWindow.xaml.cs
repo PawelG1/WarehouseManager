@@ -23,11 +23,11 @@ namespace WarehouseManagerApp
         {
             InitializeComponent();
             
-            // Set DataContext for both controls
+            //set datacontext for both controls
             AddProductControl.DataContext = addProductViewModel;
             ProductsListControl.DataContext = productListViewModel;
             
-            // Hook up the callback
+            //hook up the callback
             addProductViewModel.OnProductAdded = async () => await productListViewModel.LoadProductsAsync();
         }
     }

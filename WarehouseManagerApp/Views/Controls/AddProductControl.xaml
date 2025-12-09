@@ -55,9 +55,9 @@
                 FontWeight="Bold"
                 Text="Add New Product" />
 
-            <!--  Messages  -->
+            <!--messages-->
             <StackPanel Grid.Row="1" Margin="0,0,0,10">
-                <!--  Success Message  -->
+                <!--success message-->
                 <Border
                     Padding="10"
                     Background="#D4EDDA"
@@ -80,7 +80,7 @@
                         TextWrapping="Wrap" />
                 </Border>
 
-                <!--  Validation Error  -->
+                <!--validation error-->
                 <Border
                     Padding="10"
                     Background="#FFF3CD"
@@ -103,7 +103,7 @@
                         TextWrapping="Wrap" />
                 </Border>
 
-                <!--  Error Message  -->
+                <!--error message-->
                 <Border
                     Padding="10"
                     Background="#F8D7DA"

@@ -13,26 +13,93 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <StackPanel Margin="10" Orientation="Horizontal">
+        <!--header with filters-->
+        <StackPanel Grid.Row="0" Margin="10" Orientation="Horizontal">
+            <TextBlock
+                VerticalAlignment="Center"
+                Margin="0,0,10,0"
+                Text="Filter:" />
+            
+            <!--warehouse selection combobox-->
             <ComboBox
-                x:Name="selectedWarehouse"
-                Margin="50,10"
+                Width="200"
+                Margin="0,0,20,0"
                 DisplayMemberPath="Name"
                 ItemsSource="{Binding Warehouses}"
                 SelectedValue="{Binding SelectedWarehouseId}"
-                SelectedValuePath="Id" />
+                SelectedValuePath="Id">
+                <ComboBox.Style>
+                    <Style TargetType="ComboBox">
+                        <Setter Property="IsEnabled" Value="True" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsLoading}" Value="True">
+                                <Setter Property="IsEnabled" Value="False" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ComboBox.Style>
+            </ComboBox>
+
+            <!--search textbox-->
             <TextBlock
-                Grid.Row="0"
-                Margin="50,10"
+                VerticalAlignment="Center"
+                Margin="0,0,10,0"
+                Text="Search:" />
+            
+            <TextBox
+                Width="250"
+                Padding="5"
+                Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}">
+                <TextBox.Style>
+                    <Style TargetType="TextBox">
+                        <Setter Property="IsEnabled" Value="True" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsLoading}" Value="True">
+                                <Setter Property="IsEnabled" Value="False" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBox.Style>
+            </TextBox>
+
+            <!--clear search button-->
+            <Button
+                Margin="5,0,20,0"
+                Padding="8,5"
+                Command="{Binding ClearSearchCommand}"
+                Content="✕"
+                ToolTip="Clear search">
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="Background" Value="LightGray" />
+                        <Setter Property="BorderThickness" Value="0" />
+                        <Setter Property="Cursor" Value="Hand" />
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="Gray" />
+                            </Trigger>
+                            <DataTrigger Binding="{Binding SearchText}" Value="">
+                                <Setter Property="IsEnabled" Value="False" />
+                                <Setter Property="Opacity" Value="0.5" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+
+            <!--products counter-->
+            <TextBlock
+                VerticalAlignment="Center"
                 FontSize="16"
                 FontWeight="Medium">
-                Products Count:<Run Text="{Binding ProductsCount}" />
+                Products: <Run Text="{Binding ProductsCount}" />
             </TextBlock>
         </StackPanel>
 
-        <!--  Error Message  -->
+        <!--error message-->
         <Border
             Grid.Row="1"
             Margin="10,0,10,10"
@@ -57,10 +124,12 @@
                 TextWrapping="Wrap" />
         </Border>
 
+        <!--products listview-->
         <ListView
             Grid.Row="2"
             Margin="10"
-            ItemsSource="{Binding Products}">
+            ItemsSource="{Binding Products}"
+            SelectedItem="{Binding SelectedProduct}">
             <ListView.View>
                 <GridView>
                     <GridViewColumn
@@ -91,6 +160,55 @@
             </ListView.View>
         </ListView>
 
+        <!--action buttons-->
+        <StackPanel
+            Grid.Row="3"
+            Margin="10"
+            HorizontalAlignment="Right"
+            Orientation="Horizontal">
+            <Button
+                Padding="15,8"
+                Command="{Binding EditProductCommand}"
+                Content="Edit Selected">
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="Background" Value="#FFC107" />
+                        <Setter Property="Foreground" Value="White" />
+                        <Setter Property="BorderThickness" Value="0" />
+                        <Setter Property="Cursor" Value="Hand" />
+                        <Style.Triggers>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Background" Value="#CCCCCC" />
+                                <Setter Property="Foreground" Value="#666666" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+            
+            <Button
+                Margin="10,0,0,0"
+                Padding="15,8"
+                Command="{Binding DeleteProductCommand}"
+                Content="Delete Selected">
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="Background" Value="#DC3545" />
+                        <Setter Property="Foreground" Value="White" />
+                        <Setter Property="BorderThickness" Value="0" />
+                        <Setter Property="Cursor" Value="Hand" />
+                        <Style.Triggers>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Background" Value="#CCCCCC" />
+                                <Setter Property="Foreground" Value="#666666" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+        </StackPanel>
+
+        <!--loading indicator-->
         <ProgressBar
             Grid.Row="2"
             Height="30"
