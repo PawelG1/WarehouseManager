@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace WarehouseManagerApp.Views
+namespace WarehouseManagerApp.Views.Controls
 {
     /// <summary>
     /// Logika interakcji dla klasy ProductsList.xaml
