@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace WarehouseManagerApp.Views.Controls
 {
     /// <summary>
-    /// Logika interakcji dla klasy AddProductControl.xaml
+    /// Logika interakcji dla klasy NavBarControl.xaml
     /// </summary>
-    public partial class AddProductControl : UserControl
+    public partial class NavBarControl : UserControl
     {
-        public AddProductControl()
+        public NavBarControl()
         {
             InitializeComponent();
         }
