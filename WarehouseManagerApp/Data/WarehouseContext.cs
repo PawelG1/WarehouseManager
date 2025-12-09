@@ -8,17 +8,28 @@ using WarehouseManagerApp.Models;
 
 namespace WarehouseManagerApp.Data
 {
-    class WarehouseContext : DbContext
+    public class WarehouseContext : DbContext
     {
         //tables representations for db
         public DbSet<Product> Products { get; set; }
         public DbSet<Warehouse> Warehouses { get; set; }
 
+        public WarehouseContext() : base()
+        {
+        }
+        //contructor for tests DI
+        public WarehouseContext(DbContextOptions<WarehouseContext> options) : base(options) { 
+        }
+
         //db connection config
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            //path to local db file
-            optionsBuilder.UseSqlite("Data Source=localDb.db");
+            //config only if options are unset
+            if (!optionsBuilder.IsConfigured)
+            {
+                //path to local db file
+                optionsBuilder.UseSqlite("Data Source=localDb.db");
+            }
         }
 
         //model relations and boundries config
