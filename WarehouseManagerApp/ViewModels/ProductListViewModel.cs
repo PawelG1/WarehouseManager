@@ -3,7 +3,6 @@ using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using WarehouseManagerApp.Models;
 using WarehouseManagerApp.Services;
@@ -19,7 +18,7 @@ namespace WarehouseManagerApp.ViewModels
             _warehouseService = warehouseService;
 
             //load available warehouses for warehouse selection
-            LoadWarehouses();
+            LoadWarehousesAsync();
 
             //load products from db file
             LoadProductsAsync();
@@ -27,6 +26,22 @@ namespace WarehouseManagerApp.ViewModels
 
         [ObservableProperty]
         private List<Product>? products;
+
+        [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(DeleteProductCommand))]
+        [NotifyCanExecuteChangedFor(nameof(EditProductCommand))]
+        private Product? selectedProduct; //selected product in listview
+
+        [ObservableProperty]
+        private string searchText = string.Empty; //search filter text
+
+        partial void OnSearchTextChanged(string value)
+        {
+            FilterProducts();
+        }
+
+        [ObservableProperty]
+        private List<Warehouse>? warehouses;
 
         [ObservableProperty]
         private int? selectedWarehouseId;
@@ -43,16 +58,15 @@ namespace WarehouseManagerApp.ViewModels
         [ObservableProperty]
         private bool hasError;
 
-        [ObservableProperty]
-        private List<Warehouse> warehouses; //used for warehouse selection in combobox
+        private List<Product>? _allProducts; //cache of all products for filtering
 
         partial void OnSelectedWarehouseIdChanged(int? value)
         {
-            LoadProductsAsync();
+            FilterProducts();
         }
 
         [RelayCommand]
-        public async Task LoadWarehouses()
+        private async Task LoadWarehousesAsync()
         {
             IsLoading = true;
             ErrorMessage = null;
@@ -60,7 +74,7 @@ namespace WarehouseManagerApp.ViewModels
             try
             {
                 var warehousesFromDb = await _warehouseService.GetWarehousesAsync();
-                Warehouses = new List<Warehouse> //first "Warehouse" represents all warehouses option
+                Warehouses = new List<Warehouse> //first warehouse represents "all warehouses" option
                 {
                     new Warehouse{
                     Id= -1,
@@ -73,16 +87,14 @@ namespace WarehouseManagerApp.ViewModels
             }
             catch (Exception ex)
             {
-                ErrorMessage = ex.Message;
+                ErrorMessage = $"Error loading warehouses: {ex.Message}";
                 HasError = true;
             }
             finally
             {
                 IsLoading = false;
             }
-
         }
-
 
         [RelayCommand]
         public async Task LoadProductsAsync()
@@ -92,27 +104,90 @@ namespace WarehouseManagerApp.ViewModels
             HasError = false;
             try
             {
-                if (SelectedWarehouseId != null 
-                    && SelectedWarehouseId != -1) // id == -1 means that products from all warehouses should be shown
-                {   
-                    //TODO: collect products from selected warehouse
-                    Products = await _warehouseService.GetProductsAsync(SelectedWarehouseId??0);
-                }
-                else
-                {
-                    Products = await _warehouseService.GetProductsAsync();
-                }
-                ProductsCount = await _warehouseService.GetProductsCountAsync();
+                //load all products to cache
+                _allProducts = await _warehouseService.GetProductsAsync();
+                
+                //apply filters
+                FilterProducts();
             }
             catch(Exception e)
             {
-                ErrorMessage = $"An error occurred while loading products from db: {e.Message}";
+                ErrorMessage = $"An error occurred while loading products: {e.Message}";
                 HasError = true;
             }
             finally
             {
                 IsLoading = false;
             }
+        }
+
+        private void FilterProducts()
+        {
+            if (_allProducts == null)
+            {
+                Products = null;
+                ProductsCount = 0;
+                return;
+            }
+
+            var filtered = _allProducts.AsEnumerable();
+
+            //filter by warehouse
+            if (SelectedWarehouseId != null && SelectedWarehouseId != -1)
+            {
+                filtered = filtered.Where(p => p.WarehouseId == SelectedWarehouseId.Value);
+            }
+
+            //filter by search text
+            if (!string.IsNullOrWhiteSpace(SearchText))
+            {
+                var search = SearchText.ToLower();
+                filtered = filtered.Where(p =>
+                    p.Name.ToLower().Contains(search) ||
+                    p.SKU.ToLower().Contains(search) ||
+                    p.Warehouse?.Name.ToLower().Contains(search) == true
+                );
+            }
+
+            Products = filtered.ToList();
+            ProductsCount = Products.Count;
+        }
+
+        //delete selected product
+        [RelayCommand(CanExecute = nameof(CanDeleteProduct))]
+        private async Task DeleteProductAsync()
+        {
+            if (SelectedProduct == null) return;
+
+            try
+            {
+                await _warehouseService.DeleteProductAsync(SelectedProduct.Id);
+                await LoadProductsAsync(); //refresh product list
+                SelectedProduct = null; //clear selection
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage = $"Error deleting product: {ex.Message}";
+                HasError = true;
+            }
+        }
+
+        private bool CanDeleteProduct() => SelectedProduct != null;
+
+        //edit selected product TODO: implement
+        [RelayCommand(CanExecute = nameof(CanEditProduct))]
+        private void EditProduct()
+        {
+            if (SelectedProduct == null) return;
+            //TODO: implement editing
+        }
+
+        private bool CanEditProduct() => SelectedProduct != null;
+
+        [RelayCommand]
+        private void ClearSearch()
+        {
+            SearchText = string.Empty;
         }
     }
 }

@@ -49,7 +49,7 @@ namespace WarehouseManagerApp.ViewModels
         [ObservableProperty]
         private string? validationError;
 
-        // Proste bool properties dla Visibility
+        //bool properties for visibility binding
         [ObservableProperty]
         private bool hasError;
 
@@ -87,7 +87,7 @@ namespace WarehouseManagerApp.ViewModels
         {
             ClearMessages();
 
-            // Validation
+            //validation
             if (string.IsNullOrWhiteSpace(Name))
             {
                 ValidationError = "Product name is required.";
