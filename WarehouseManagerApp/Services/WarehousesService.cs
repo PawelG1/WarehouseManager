@@ -107,21 +107,12 @@ namespace WarehouseManagerApp.Services
 
         public async Task<Product?> GetProductByIdAsync(int id)
         {
-            if (_productsCache != null &&
-                _productsCacheTime.HasValue &&
-                DateTime.Now - _productsCacheTime < _cacheExpirationTime)
-            {
-                var product =  _productsCache.FirstOrDefault(p => p.Id == id);
-                if (product != null)
-                {
-                    return product;
-                }
-            }
-
+            //always load from database with AsNoTracking for editing
+            //cache may contain tracked entities which cause conflicts during update
             return await _context.Products
                 .Include(p => p.Warehouse)
+                .AsNoTracking() //don't track this entity
                 .FirstOrDefaultAsync(p => p.Id == id);
-            
         }
 
         public async Task<List<Product>> GetProductsAsync()
@@ -191,6 +182,9 @@ namespace WarehouseManagerApp.Services
 
         public async Task UpdateProductAsync(Product product)
         {
+            //detach all tracked entities to avoid conflicts
+            _context.ChangeTracker.Clear();
+            
             _context.Products.Update(product);
             await _context.SaveChangesAsync();
             

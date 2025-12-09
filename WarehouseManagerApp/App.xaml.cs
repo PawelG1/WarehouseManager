@@ -25,16 +25,10 @@ namespace WarehouseManagerApp
             ServiceProvider = serviceCollection.BuildServiceProvider();
 
             //init db
-            var warehouseService = ServiceProvider.GetService<IWarehousesService>();
+            var warehouseService = ServiceProvider.GetRequiredService<IWarehousesService>();
             warehouseService.InitializeDbAsync().Wait();
 
-            //using (var scope = ServiceProvider.CreateScope())
-            //{
-            //    var warehouseService = scope.ServiceProvider.GetRequiredService<IWarehouseService>();
-            //    warehouseService.InitializeDbAsync().Wait();
-            //}
-
-                var mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
+            var mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
             mainWindow.Show();
         }
 
@@ -42,7 +36,7 @@ namespace WarehouseManagerApp
         {
             //register DbContext 
             services.AddDbContext<WarehouseContext>();
-            //register servies
+            //register services
             services.AddSingleton<IWarehousesService, WarehousesService>();
             //register ViewModels
             services.AddTransient<ProductListViewModel>();

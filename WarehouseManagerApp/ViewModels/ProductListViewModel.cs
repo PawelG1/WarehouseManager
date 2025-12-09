@@ -174,12 +174,20 @@ namespace WarehouseManagerApp.ViewModels
 
         private bool CanDeleteProduct() => SelectedProduct != null;
 
-        //edit selected product TODO: implement
+        //edit selected product
         [RelayCommand(CanExecute = nameof(CanEditProduct))]
         private void EditProduct()
         {
             if (SelectedProduct == null) return;
-            //TODO: implement editing
+            
+            var editWindow = new Views.EditProductWindow(SelectedProduct.Id);
+            editWindow.Owner = System.Windows.Application.Current.MainWindow;
+            
+            if (editWindow.ShowDialog() == true)
+            {
+                //refresh list after successful edit
+                _ = LoadProductsAsync();
+            }
         }
 
         private bool CanEditProduct() => SelectedProduct != null;
