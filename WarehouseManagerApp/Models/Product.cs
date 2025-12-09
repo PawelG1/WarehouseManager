@@ -9,8 +9,8 @@ namespace WarehouseManagerApp.Models
     public class Product
     {
         public int Id { get; set; }
-        public string Name { get; set; }
-        public string SKU { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string SKU { get; set; } = string.Empty;
         public int Quantity { get; set; }
         public int minimumQuantity { get; set; }
         //Foreign Key for Warehouses table

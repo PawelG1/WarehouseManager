@@ -1,6 +1,10 @@
-﻿using System.Configuration;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System.Configuration;
 using System.Data;
 using System.Windows;
+using WarehouseManagerApp.Data;
+using WarehouseManagerApp.Services;
+using WarehouseManagerApp.ViewModels;
 
 namespace WarehouseManagerApp
 {
@@ -9,6 +13,43 @@ namespace WarehouseManagerApp
     /// </summary>
     public partial class App : Application
     {
+        public IServiceProvider ServiceProvider { get; private set; }
+
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            base.OnStartup(e);
+
+            var serviceCollection = new ServiceCollection();
+            ConfigureServices(serviceCollection);
+            
+            ServiceProvider = serviceCollection.BuildServiceProvider();
+
+            //init db
+            var warehouseService = ServiceProvider.GetService<IWarehousesService>();
+            warehouseService.InitializeDbAsync().Wait();
+
+            //using (var scope = ServiceProvider.CreateScope())
+            //{
+            //    var warehouseService = scope.ServiceProvider.GetRequiredService<IWarehouseService>();
+            //    warehouseService.InitializeDbAsync().Wait();
+            //}
+
+                var mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
+            mainWindow.Show();
+        }
+
+        private void ConfigureServices(IServiceCollection services)
+        {
+            //register DbContext 
+            services.AddDbContext<WarehouseContext>();
+            //register servies
+            services.AddSingleton<IWarehousesService, WarehousesService>();
+            //register ViewModels
+            services.AddTransient<ProductListViewModel>();
+            services.AddTransient<AddProductViewModel>();
+            //register windows
+            services.AddSingleton<MainWindow>();
+        }
     }
 
 }

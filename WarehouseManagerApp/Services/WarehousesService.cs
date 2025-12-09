@@ -10,9 +10,16 @@ using WarehouseManagerApp.Models;
 
 namespace WarehouseManagerApp.Services
 {
-    public class WarehousesService : IWarehouseService
+    public class WarehousesService : IWarehousesService
     {
         private readonly WarehouseContext _context;
+
+        //cache
+        private List<Product>? _productsCache;
+        private DateTime? _productsCacheTime;
+        private List<Warehouse>? _warehousesCache;
+        private DateTime? _warehousesCacheTime;
+        private readonly TimeSpan _cacheExpirationTime = TimeSpan.FromMinutes(5);
 
         public WarehousesService(WarehouseContext context)
         {
@@ -77,6 +84,10 @@ namespace WarehouseManagerApp.Services
         public async Task AddProductAsync(Product product)
         {
             await _context.Products.AddAsync(product);
+            await _context.SaveChangesAsync();
+
+            _productsCache = null;
+            _productsCacheTime = null;
         }
 
         public async Task DeleteProductAsync(int id)
@@ -88,11 +99,25 @@ namespace WarehouseManagerApp.Services
             {
                 _context.Products.Remove(productToBeDeleted);
                 await _context.SaveChangesAsync();
+
+                _productsCache = null;
+                _productsCacheTime = null;
             }
         }
 
         public async Task<Product?> GetProductByIdAsync(int id)
         {
+            if (_productsCache != null &&
+                _productsCacheTime.HasValue &&
+                DateTime.Now - _productsCacheTime < _cacheExpirationTime)
+            {
+                var product =  _productsCache.FirstOrDefault(p => p.Id == id);
+                if (product != null)
+                {
+                    return product;
+                }
+            }
+
             return await _context.Products
                 .Include(p => p.Warehouse)
                 .FirstOrDefaultAsync(p => p.Id == id);
@@ -101,35 +126,74 @@ namespace WarehouseManagerApp.Services
 
         public async Task<List<Product>> GetProductsAsync()
         {
-            return await _context.Products
+            if(_productsCache != null &&
+                _productsCacheTime.HasValue &&
+                DateTime.Now - _productsCacheTime < _cacheExpirationTime)
+            {
+                return _productsCache;
+            }
+
+            _productsCache = await _context.Products
                 .Include(p => p.Warehouse)
-                .OrderByDescending(p => p.Id)
+                .OrderBy(p => p.Id)
                 .ToListAsync();
+
+            _productsCacheTime = DateTime.Now;
+
+            return _productsCache;
+        }
+
+        public async Task<List<Product>> GetProductsAsync(int warehouseId)
+        {
+            var allProducts = await GetProductsAsync();
+
+            return allProducts
+                .Where(p => p.WarehouseId == warehouseId)
+                .OrderBy(p => p.Id)
+                .ToList();
         }
 
         public async Task<int> GetProductsCountAsync()
         {
-            return await _context.Products
-                .Include(p => p.Warehouse)
-                .CountAsync();
+            var products = await GetProductsAsync();
+            return products.Count;
+        }
+
+        public async Task<int> GetProductsCountAsync(int warehouseId)
+        {
+            var products = await GetProductsAsync(warehouseId);
+            return products.Count;
         }
 
         public async Task<List<Warehouse>> GetWarehousesAsync()
         {
-            return await _context.Warehouses
+            if (_warehousesCache != null &&
+                _warehousesCacheTime.HasValue &&
+                DateTime.Now - _warehousesCacheTime.Value < _cacheExpirationTime)
+            {
+                return _warehousesCache;
+            }
+
+            _warehousesCache = await _context.Warehouses
                 .ToListAsync();
+
+            _warehousesCacheTime = DateTime.Now;
+
+            return _warehousesCache;
         }
 
         public async Task<int> GetWarehousesCountAsync()
         {
-            return await _context.Warehouses
-                .CountAsync();
+            var warehouses = await GetWarehousesAsync();
+            return warehouses.Count;
         }
 
 
         public Task UpdateProductAsync(Product product)
         {
             throw new NotImplementedException();
+            //_productsCache = null;
+            //_productsCacheTime = null;
         }
     }
 }

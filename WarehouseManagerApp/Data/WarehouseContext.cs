@@ -35,17 +35,41 @@ namespace WarehouseManagerApp.Data
         //model relations and boundries config
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //relations
-            modelBuilder.Entity<Product>()
-                .HasOne(p => p.Warehouse)
-                .WithMany(w => w.Products)
-                .HasForeignKey(p => p.WarehouseId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<Product>()
-                .Property(p => p.minimumQuantity)
-                .HasDefaultValue(1);
+            // Product configuration
+            modelBuilder.Entity<Product>(entity =>
+            {
+                entity.HasKey(p => p.Id);
                 
+                entity.Property(p => p.Name)
+                    .IsRequired()
+                    .HasMaxLength(200);
+                
+                entity.Property(p => p.SKU)
+                    .IsRequired()
+                    .HasMaxLength(100);
+                
+                entity.Property(p => p.minimumQuantity)
+                    .HasDefaultValue(1);
+                
+                entity.HasOne(p => p.Warehouse)
+                    .WithMany(w => w.Products)
+                    .HasForeignKey(p => p.WarehouseId)
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            // Warehouse configuration
+            modelBuilder.Entity<Warehouse>(entity =>
+            {
+                entity.HasKey(w => w.Id);
+                
+                entity.Property(w => w.Name)
+                    .IsRequired()
+                    .HasMaxLength(200);
+                
+                entity.Property(w => w.Location)
+                    .IsRequired()
+                    .HasMaxLength(500);
+            });
         }
     }
 }
