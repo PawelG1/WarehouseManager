@@ -2,7 +2,7 @@
 
 A modern desktop application for managing warehouse inventory built with WPF and .NET 8.
 
-![Main Dashboard](docs.screenshots\dashboard.png)
+![Main Dashboard](docs.screenshots/dashboard.png)
 
 ## Overview
 
