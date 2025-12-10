@@ -37,7 +37,7 @@
                         <Style TargetType="Grid">
                             <Setter Property="Visibility" Value="Collapsed" />
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding CurrentView}" Value="Inventory">
+                                <DataTrigger Binding="{Binding CurrentView}" Value="Dashboard">
                                     <Setter Property="Visibility" Value="Visible" />
                                 </DataTrigger>
                             </Style.Triggers>
@@ -64,21 +64,21 @@
                 </Grid>
                 <!--  inventory END  -->
 
-                <!--  Configuration  -->
+                <!--  Warehouses  -->
                 <Grid>
                     <Grid.Style>
                         <Style TargetType="Grid">
                             <Setter Property="Visibility" Value="Collapsed" />
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding CurrentView}" Value="Configuration">
+                                <DataTrigger Binding="{Binding CurrentView}" Value="Warehouses">
                                     <Setter Property="Visibility" Value="Visible" />
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
                     </Grid.Style>
-                    <TextBlock Text="Configuration Coming Soon..." />
+                    <Controls:WarehousesList />
                 </Grid>
-                <!--  Configuration END  -->
+                <!--  Warehouses END  -->
 
                 <!--  about section  -->
                 <Grid>

@@ -45,8 +45,8 @@
             Content="Inventory"
             Style="{StaticResource MenuBtn}" />
         <Button
-            Command="{Binding NavigateToConfigurationCommand}"
-            Content="Configuration"
+            Command="{Binding NavigateToWarehousesCommand}"
+            Content="Warehouses"
             Style="{StaticResource MenuBtn}" />
         <Button
             Command="{Binding NavigateToAboutCommand}"

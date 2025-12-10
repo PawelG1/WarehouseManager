@@ -47,10 +47,10 @@ namespace WarehouseManagerApp.ViewModels
         }
 
         [RelayCommand]
-        private void NavigateToConfiguration()
+        private void NavigateToWarehouses()
         {
-            CurrentView = "Configuration";
-            CurrentPageTitle = "Configuration";
+            CurrentView = "Warehouses";
+            CurrentPageTitle = "Warehouses";
         }
 
         [RelayCommand]
