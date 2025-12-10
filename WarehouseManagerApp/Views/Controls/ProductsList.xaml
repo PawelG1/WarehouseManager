@@ -211,6 +211,30 @@
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
 
+                    <GridViewColumn Header="Volume/Unit" Width="100">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock
+                                    FontSize="14"
+                                    HorizontalAlignment="Center"
+                                    Text="{Binding VolumePerUnitM3, StringFormat={}{0:F2} m³}" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+                    <GridViewColumn Header="Total Volume" Width="110">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock
+                                    FontSize="14"
+                                    HorizontalAlignment="Center"
+                                    FontWeight="Medium"
+                                    Foreground="#004d73"
+                                    Text="{Binding TotalVolumeM3, StringFormat={}{0:F2} m³}" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
                     <GridViewColumn Header="Warehouse" Width="200">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
@@ -235,7 +259,7 @@
                                         FontSize="12">
                                         <Button.Style>
                                             <Style TargetType="Button">
-                                                <Setter Property="Background" Value="#4CAF50" />
+                                                <Setter Property="Background" Value="#004d73" />
                                                 <Setter Property="Foreground" Value="White" />
                                                 <Setter Property="BorderThickness" Value="0" />
                                                 <Setter Property="Cursor" Value="Hand" />

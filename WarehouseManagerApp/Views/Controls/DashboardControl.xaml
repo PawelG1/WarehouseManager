@@ -186,7 +186,7 @@
                             Margin="0,5,0,15"
                             FontSize="12"
                             Foreground="#666666"
-                            Text="Percentage of products vs capacity (m³)" />
+                            Text="Volume occupied vs warehouse capacity" />
 
                         <ItemsControl ItemsSource="{Binding WarehouseCapacities}">
                             <ItemsControl.ItemTemplate>
@@ -242,10 +242,10 @@
                                                     FontSize="12"
                                                     FontWeight="Bold"
                                                     Foreground="White">
-                                                    <Run Text="{Binding CurrentProducts}" />
+                                                    <Run Text="{Binding VolumeOccupiedM3, StringFormat={}{0:F1}}" />
                                                     <Run Text="/" />
                                                     <Run Text="{Binding Capacity}" />
-                                                    <Run Text="products" />
+                                                    <Run Text="m³" />
                                                 </TextBlock>
                                             </Border>
                                         </Border>
@@ -360,10 +360,10 @@
                                                     FontWeight="Bold"
                                                     Text="{Binding WarehouseName}" />
                                                 <TextBlock FontSize="12" Foreground="#666666">
-                                                    <Run Text="{Binding CurrentProducts}" />
+                                                    <Run Text="{Binding VolumeOccupiedM3, StringFormat={}{0:F1}}" />
                                                     <Run Text="/" />
                                                     <Run Text="{Binding Capacity}" />
-                                                    <Run Text="products" />
+                                                    <Run Text="m³ occupied (" /><Run Text="{Binding CurrentProducts}" /><Run Text=" products)" />
                                                 </TextBlock>
                                             </StackPanel>
 

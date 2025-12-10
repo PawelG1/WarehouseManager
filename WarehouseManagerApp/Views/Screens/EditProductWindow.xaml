@@ -49,6 +49,7 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
             <TextBlock
@@ -151,7 +152,23 @@
                     Text="{Binding MinimumQuantity, UpdateSourceTrigger=PropertyChanged}" />
             </StackPanel>
 
-            <StackPanel Grid.Row="6" Margin="0,0,0,20">
+            <StackPanel Grid.Row="6" Margin="0,0,0,10">
+                <TextBlock
+                    Margin="0,0,0,5"
+                    FontWeight="SemiBold"
+                    Text="Volume per Unit (m?):" />
+                <TextBox
+                    Padding="5"
+                    Style="{StaticResource DisableWhenLoadingTextBox}"
+                    Text="{Binding VolumePerUnitM3, UpdateSourceTrigger=PropertyChanged}" />
+                <TextBlock
+                    Margin="0,2,0,0"
+                    FontSize="10"
+                    Foreground="#666666"
+                    Text="How much space (in cubic meters) does one unit of this product occupy?" />
+            </StackPanel>
+
+            <StackPanel Grid.Row="7" Margin="0,0,0,20">
                 <TextBlock
                     Margin="0,0,0,5"
                     FontWeight="SemiBold"
@@ -167,7 +184,7 @@
 
             <!--  action buttons  -->
             <StackPanel
-                Grid.Row="7"
+                Grid.Row="8"
                 HorizontalAlignment="Right"
                 Orientation="Horizontal">
                 <Button
@@ -206,7 +223,7 @@
             <!--  loading overlay  -->
             <Border
                 Grid.Row="0"
-                Grid.RowSpan="8"
+                Grid.RowSpan="9"
                 Background="#80FFFFFF">
                 <Border.Style>
                     <Style TargetType="Border">
