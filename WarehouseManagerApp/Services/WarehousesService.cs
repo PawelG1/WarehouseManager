@@ -238,5 +238,71 @@ namespace WarehouseManagerApp.Services
                 _productsCacheTime = null;
             }
         }
+
+        public async Task<DashboardStatistics> GetDashboardStatisticsAsync()
+        {
+            var warehouses = await GetWarehousesAsync();
+            var products = await GetProductsAsync();
+
+            var statistics = new DashboardStatistics
+            {
+                TotalWarehouses = warehouses.Count,
+                TotalProducts = products.Count,
+                LowStockItems = products.Count(p => p.Quantity < p.minimumQuantity),
+            };
+
+            // Calculate warehouse capacities and utilization
+            foreach (var warehouse in warehouses)
+            {
+                var warehouseProducts = products.Where(p => p.WarehouseId == warehouse.Id).ToList();
+                var productCount = warehouseProducts.Count;
+                var utilization = warehouse.CapacityM3 > 0 
+                    ? (double)productCount / warehouse.CapacityM3 * 100 
+                    : 0;
+
+                var capacity = new WarehouseCapacity
+                {
+                    WarehouseName = warehouse.Name,
+                    CurrentProducts = productCount,
+                    Capacity = warehouse.CapacityM3,
+                    UtilizationPercentage = utilization,
+                    IsCritical = utilization > 80 // Critical only when overfilled (>80%)
+                };
+
+                statistics.WarehouseCapacities.Add(capacity);
+
+                if (capacity.IsCritical)
+                {
+                    statistics.CriticalCapacityWarehouses++;
+                }
+
+                // Product distribution
+                statistics.ProductsByWarehouse.Add(new ProductDistribution
+                {
+                    WarehouseName = warehouse.Name,
+                    ProductCount = productCount
+                });
+            }
+
+            // Calculate average utilization
+            statistics.AverageWarehouseUtilization = statistics.WarehouseCapacities.Any()
+                ? statistics.WarehouseCapacities.Average(w => w.UtilizationPercentage)
+                : 0;
+
+            // Get low stock products
+            statistics.LowStockProducts = products
+                .Where(p => p.Quantity < p.minimumQuantity)
+                .Select(p => new LowStockProduct
+                {
+                    ProductName = p.Name,
+                    SKU = p.SKU,
+                    CurrentQuantity = p.Quantity,
+                    MinimumQuantity = p.minimumQuantity,
+                    WarehouseName = p.Warehouse?.Name ?? "Unknown"
+                })
+                .ToList();
+
+            return statistics;
+        }
     }
 }

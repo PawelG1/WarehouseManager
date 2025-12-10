@@ -43,9 +43,9 @@
                             </Style.Triggers>
                         </Style>
                     </Grid.Style>
-                    <TextBlock Text="Coming Soon..." />
+                    <Controls:DashboardControl x:Name="DashboardControl" />
                 </Grid>
-                <!--  dashbaord  -->
+                <!--  dashboard END  -->
 
                 <!--  inventory view  -->
                 <Grid>

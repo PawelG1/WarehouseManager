@@ -31,5 +31,8 @@ namespace WarehouseManagerApp.Models
         public int WarehouseId { get; set; }
 
         public Warehouse Warehouse { get; set; } = null!;
+
+        // Helper property for low stock detection
+        public bool IsLowStock => Quantity < minimumQuantity;
     }
 }

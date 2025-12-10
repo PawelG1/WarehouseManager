@@ -15,17 +15,19 @@ namespace WarehouseManagerApp.ViewModels
             AddProductViewModel addProductViewModel,
             WarehouseListViewModel warehouseListViewModel,
             AddWarehouseViewModel addWarehouseViewModel,
-            EditWarehouseViewModel editWarehouseViewModel)
+            EditWarehouseViewModel editWarehouseViewModel,
+            DashboardViewModel dashboardViewModel)
         {
             ProductListViewModel = productListViewModel;
             AddProductViewModel = addProductViewModel;
             WarehouseListViewModel = warehouseListViewModel;
             AddWarehouseViewModel = addWarehouseViewModel;
             EditWarehouseViewModel = editWarehouseViewModel;
+            DashboardViewModel = dashboardViewModel;
 
             //set initial page
-            CurrentView = "Inventory";
-            CurrentPageTitle = "Inventory Management";
+            CurrentView = "Dashboard";
+            CurrentPageTitle = "Dashboard";
 
             //hook up callback for products - when add product is clicked
             productListViewModel.AddProduct = () =>
@@ -82,6 +84,7 @@ namespace WarehouseManagerApp.ViewModels
         public WarehouseListViewModel WarehouseListViewModel { get; }
         public AddWarehouseViewModel AddWarehouseViewModel { get; }
         public EditWarehouseViewModel EditWarehouseViewModel { get; }
+        public DashboardViewModel DashboardViewModel { get; }
 
         //current view name
         [ObservableProperty]
