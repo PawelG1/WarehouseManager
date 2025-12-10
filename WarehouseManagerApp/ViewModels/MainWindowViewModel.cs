@@ -12,10 +12,12 @@ namespace WarehouseManagerApp.ViewModels
     {
         public MainWindowViewModel(
             ProductListViewModel productListViewModel,
-            AddProductViewModel addProductViewModel)
+            AddProductViewModel addProductViewModel,
+            WarehouseListViewModel warehouseListViewModel)
         {
             ProductListViewModel = productListViewModel;
             AddProductViewModel = addProductViewModel;
+            WarehouseListViewModel = warehouseListViewModel;
 
             //set initial page
             CurrentView = "Inventory";
@@ -29,6 +31,7 @@ namespace WarehouseManagerApp.ViewModels
         //viewmodels for controls
         public ProductListViewModel ProductListViewModel { get; }
         public AddProductViewModel AddProductViewModel { get; }
+        public WarehouseListViewModel WarehouseListViewModel { get; }
 
         //current view name
         [ObservableProperty]

@@ -76,7 +76,7 @@
                             </Style.Triggers>
                         </Style>
                     </Grid.Style>
-                    <Controls:WarehousesList />
+                    <Controls:WarehousesList x:Name="WarehousesListControl" />
                 </Grid>
                 <!--  Warehouses END  -->
 
