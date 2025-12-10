@@ -26,6 +26,10 @@ namespace WarehouseManagerApp.Models
         [Range(0, int.MaxValue, ErrorMessage = "Minimum quantity must be 0 or greater")]
         public int minimumQuantity { get; set; }
 
+        [Required(ErrorMessage = "Volume is required")]
+        [Range(0.01, double.MaxValue, ErrorMessage = "Volume per unit must be greater than 0")]
+        public double VolumePerUnitM3 { get; set; } = 1.0;
+
         [Required(ErrorMessage = "Warehouse is required")]
         [Range(1, int.MaxValue, ErrorMessage = "Please select a warehouse")]
         public int WarehouseId { get; set; }
@@ -34,5 +38,8 @@ namespace WarehouseManagerApp.Models
 
         // Helper property for low stock detection
         public bool IsLowStock => Quantity < minimumQuantity;
+
+        // Helper property for total volume occupied by this product
+        public double TotalVolumeM3 => Quantity * VolumePerUnitM3;
     }
 }

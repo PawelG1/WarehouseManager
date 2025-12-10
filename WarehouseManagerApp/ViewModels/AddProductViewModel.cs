@@ -33,6 +33,9 @@ namespace WarehouseManagerApp.ViewModels
         private int minimumQuantity;
 
         [ObservableProperty]
+        private double volumePerUnitM3 = 1.0;
+
+        [ObservableProperty]
         private int selectedWarehouseId;
 
         [ObservableProperty]
@@ -95,6 +98,7 @@ namespace WarehouseManagerApp.ViewModels
                 SKU = Sku,
                 Quantity = Quantity,
                 minimumQuantity = MinimumQuantity,
+                VolumePerUnitM3 = VolumePerUnitM3,
                 WarehouseId = SelectedWarehouseId
             };
 
@@ -146,6 +150,7 @@ namespace WarehouseManagerApp.ViewModels
             Sku = string.Empty;
             Quantity = 0;
             MinimumQuantity = 0;
+            VolumePerUnitM3 = 1.0;
             ClearMessages();
             if (Warehouses?.Count > 0)
             {

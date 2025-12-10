@@ -26,6 +26,7 @@ namespace WarehouseManagerApp.Services
         }
         public async Task InitializeDbAsync()
         {
+            // Create database if doesn't exist (includes all properties from current model)
             await _context.Database.EnsureCreatedAsync();
 
             if(!await _context.Warehouses.AnyAsync())//if there is no records then create some example data
@@ -56,6 +57,7 @@ namespace WarehouseManagerApp.Services
                         SKU = "DELL-SPX15",
                         Quantity = 36,
                         minimumQuantity = 5,
+                        VolumePerUnitM3 = 0.5,
                         WarehouseId = warehouses[0].Id
                     },
                     new Product
@@ -64,6 +66,7 @@ namespace WarehouseManagerApp.Services
                         SKU = "MM-275",
                         Quantity = 24,
                         minimumQuantity = 10,
+                        VolumePerUnitM3 = 0.1,
                         WarehouseId = warehouses[0].Id
                     },
                     new Product
@@ -72,6 +75,7 @@ namespace WarehouseManagerApp.Services
                         SKU = "KB212-B",
                         Quantity = 12,
                         minimumQuantity = 20,
+                        VolumePerUnitM3 = 0.2,
                         WarehouseId = warehouses[1].Id
                     },
                 };
@@ -256,8 +260,13 @@ namespace WarehouseManagerApp.Services
             {
                 var warehouseProducts = products.Where(p => p.WarehouseId == warehouse.Id).ToList();
                 var productCount = warehouseProducts.Count;
+                
+                // Calculate total volume occupied by all products in this warehouse
+                var totalVolumeOccupied = warehouseProducts.Sum(p => p.TotalVolumeM3);
+                
+                // Utilization = (total volume occupied / warehouse capacity) * 100
                 var utilization = warehouse.CapacityM3 > 0 
-                    ? (double)productCount / warehouse.CapacityM3 * 100 
+                    ? (totalVolumeOccupied / warehouse.CapacityM3) * 100 
                     : 0;
 
                 var capacity = new WarehouseCapacity
@@ -266,7 +275,8 @@ namespace WarehouseManagerApp.Services
                     CurrentProducts = productCount,
                     Capacity = warehouse.CapacityM3,
                     UtilizationPercentage = utilization,
-                    IsCritical = utilization > 80 // Critical only when overfilled (>80%)
+                    IsCritical = utilization > 80, // Critical only when overfilled (>80%)
+                    VolumeOccupiedM3 = totalVolumeOccupied
                 };
 
                 statistics.WarehouseCapacities.Add(capacity);

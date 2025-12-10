@@ -19,6 +19,7 @@ namespace WarehouseManagerApp.Models
         public int Capacity { get; set; }
         public double UtilizationPercentage { get; set; }
         public bool IsCritical { get; set; } // Only when > 80% (overfilled)
+        public double VolumeOccupiedM3 { get; set; } // Actual volume occupied in m?
     }
 
     public class ProductDistribution
