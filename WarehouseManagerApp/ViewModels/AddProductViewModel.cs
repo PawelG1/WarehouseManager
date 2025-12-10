@@ -124,8 +124,15 @@ namespace WarehouseManagerApp.ViewModels
                 OnProductAdded?.Invoke();
                 ClearForm();
             }
+            catch (InvalidOperationException ex)
+            {
+                // Handle specific validation errors (like duplicate SKU)
+                ErrorMessage = ex.Message;
+                HasError = true;
+            }
             catch (Exception ex)
             {
+                // Handle other errors with full exception details
                 var errorMessage = ex.Message;
                 var innerEx = ex.InnerException;
                 while (innerEx != null)

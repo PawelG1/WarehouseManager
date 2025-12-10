@@ -48,6 +48,11 @@ namespace WarehouseManagerApp.Data
                     .IsRequired()
                     .HasMaxLength(100);
                 
+                // Add unique index for SKU
+                entity.HasIndex(p => p.SKU)
+                    .IsUnique()
+                    .HasDatabaseName("IX_Product_SKU_Unique");
+                
                 entity.Property(p => p.minimumQuantity)
                     .HasDefaultValue(1);
                 

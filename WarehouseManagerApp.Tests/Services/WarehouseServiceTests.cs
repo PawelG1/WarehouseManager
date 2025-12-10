@@ -69,7 +69,7 @@ namespace WarehouseManagerApp.Tests.Services
             // Assert
             products.Should().HaveCount(2);
             products.Should().AllSatisfy(p => p.Warehouse.Should().NotBeNull());
-            products[0].Id.Should().BeGreaterThan(products[1].Id); // check sorting
+            products[0].Id.Should().BeLessThan(products[1].Id); // check ascending sorting by ID
         }
 
         [Fact]

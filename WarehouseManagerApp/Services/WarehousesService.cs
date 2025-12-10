@@ -86,6 +86,15 @@ namespace WarehouseManagerApp.Services
         }
         public async Task AddProductAsync(Product product)
         {
+            // Check if SKU already exists
+            var existingProduct = await _context.Products
+                .FirstOrDefaultAsync(p => p.SKU == product.SKU);
+            
+            if (existingProduct != null)
+            {
+                throw new InvalidOperationException($"A product with SKU '{product.SKU}' already exists. SKU must be unique.");
+            }
+
             await _context.Products.AddAsync(product);
             await _context.SaveChangesAsync();
 
@@ -129,7 +138,7 @@ namespace WarehouseManagerApp.Services
 
             _productsCache = await _context.Products
                 .Include(p => p.Warehouse)
-                .OrderBy(p => p.Id)
+                .OrderBy(p => p.Id) // oldest products first (ascending by ID)
                 .ToListAsync();
 
             _productsCacheTime = DateTime.Now;
@@ -143,8 +152,7 @@ namespace WarehouseManagerApp.Services
 
             return allProducts
                 .Where(p => p.WarehouseId == warehouseId)
-                .OrderBy(p => p.Id)
-                .ToList();
+                .ToList(); // already sorted by GetProductsAsync
         }
 
         public async Task<int> GetProductsCountAsync()
@@ -185,6 +193,15 @@ namespace WarehouseManagerApp.Services
 
         public async Task UpdateProductAsync(Product product)
         {
+            // Check if another product with the same SKU exists (excluding current product)
+            var existingProduct = await _context.Products
+                .FirstOrDefaultAsync(p => p.SKU == product.SKU && p.Id != product.Id);
+            
+            if (existingProduct != null)
+            {
+                throw new InvalidOperationException($"Another product with SKU '{product.SKU}' already exists. SKU must be unique.");
+            }
+
             //detach all tracked entities to avoid conflicts
             _context.ChangeTracker.Clear();
             

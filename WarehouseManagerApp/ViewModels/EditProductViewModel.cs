@@ -132,8 +132,15 @@ namespace WarehouseManagerApp.ViewModels
 
                 OnProductUpdated?.Invoke();
             }
+            catch (InvalidOperationException ex)
+            {
+                // Handle specific validation errors (like duplicate SKU)
+                ErrorMessage = ex.Message;
+                HasError = true;
+            }
             catch (Exception ex)
             {
+                // Handle other errors
                 ErrorMessage = $"Error updating product: {ex.Message}";
                 HasError = true;
             }

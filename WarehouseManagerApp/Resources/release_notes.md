@@ -1,4 +1,4 @@
-# Warehouse Manager App
+﻿# Warehouse Manager App
 
 A modern desktop application for managing warehouse inventory built with WPF and .NET 8.
 

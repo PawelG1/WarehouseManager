@@ -21,29 +21,35 @@ namespace WarehouseManagerApp.ViewModels
 
         public AboutViewModel()
         {
-            LoadReadme();
+            LoadReleaseNotes();
         }
 
-        private void LoadReadme()
+        private void LoadReleaseNotes()
         {
             try
             {
                 var baseDir = AppDomain.CurrentDomain.BaseDirectory;
-                var readmePath = Path.Combine(baseDir, "..", "..", "..", "..", "README.md");
-                readmePath = Path.GetFullPath(readmePath);
-
-                if (File.Exists(readmePath))
+                var releaseNotesPath = Path.Combine(baseDir, "Resources", "release_notes.md");
+                
+                // Try relative path first (for development)
+                if (!File.Exists(releaseNotesPath))
                 {
-                    ReadmeContent = File.ReadAllText(readmePath);
+                    releaseNotesPath = Path.Combine(baseDir, "..", "..", "..", "Resources", "release_notes.md");
+                    releaseNotesPath = Path.GetFullPath(releaseNotesPath);
+                }
+
+                if (File.Exists(releaseNotesPath))
+                {
+                    ReadmeContent = File.ReadAllText(releaseNotesPath);
                 }
                 else
                 {
-                    ReadmeContent = "# README.dm not found";
+                    ReadmeContent = "# Release Notes not found\n\nPlease ensure release_notes.md exists in the Resources folder.";
                 }
             }
             catch (Exception e)
             {
-                ReadmeContent = $"#An Error occured while loading README: {e}";
+                ReadmeContent = $"# An Error occurred while loading Release Notes\n\n{e.Message}";
             }
         }
 
