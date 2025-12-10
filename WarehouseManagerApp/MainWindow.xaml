@@ -43,9 +43,9 @@
                             </Style.Triggers>
                         </Style>
                     </Grid.Style>
-                    <TextBlock Text="Coming Soon..." />
+                    <Controls:DashboardControl x:Name="DashboardControl" />
                 </Grid>
-                <!--  dashbaord  -->
+                <!--  dashboard END  -->
 
                 <!--  inventory view  -->
                 <Grid>
@@ -59,8 +59,29 @@
                             </Style.Triggers>
                         </Style>
                     </Grid.Style>
+                    
                     <Controls:ProductsList x:Name="ProductsListControl" />
-                    <Controls:AddProductControl x:Name="AddProductControl" Visibility="Collapsed" />
+                    
+                    <!--  Add Product Form Overlay  -->
+                    <Grid Background="#CC000000">
+                        <Grid.Style>
+                            <Style TargetType="Grid">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ShowAddProductForm}" Value="True">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Grid.Style>
+                        <Grid
+                            Width="600"
+                            MaxHeight="600"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Center">
+                            <Controls:AddProductControl x:Name="AddProductControl" />
+                        </Grid>
+                    </Grid>
                 </Grid>
                 <!--  inventory END  -->
 

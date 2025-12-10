@@ -24,5 +24,6 @@ namespace WarehouseManagerApp.Services
         Task<int> GetProductsCountAsync();
         Task<int> GetProductsCountAsync(int warehouseId);
         Task<int> GetWarehousesCountAsync();
+        Task<DashboardStatistics> GetDashboardStatisticsAsync();
     }
 }

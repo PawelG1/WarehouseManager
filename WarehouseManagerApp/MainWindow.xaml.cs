@@ -27,6 +27,7 @@ namespace WarehouseManagerApp
             DataContext = viewModel;
 
             //set datacontext for controls
+            DashboardControl.DataContext = viewModel.DashboardViewModel;
             AddProductControl.DataContext = viewModel.AddProductViewModel;
             ProductsListControl.DataContext = viewModel.ProductListViewModel;
             WarehousesListControl.DataContext = viewModel.WarehouseListViewModel;
