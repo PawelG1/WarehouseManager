@@ -27,9 +27,18 @@ namespace WarehouseManagerApp.ViewModels
             CurrentView = "Inventory";
             CurrentPageTitle = "Inventory Management";
 
-            //hook up callback for products
+            //hook up callback for products - when add product is clicked
+            productListViewModel.AddProduct = () =>
+            {
+                ShowAddProductForm = true;
+            };
+
+            //hook up callback for products - when product is added successfully
             addProductViewModel.OnProductAdded = async () =>
+            {
+                ShowAddProductForm = false;
                 await productListViewModel.LoadProductsAsync();
+            };
 
             //hook up callback for warehouses - when add warehouse is clicked
             warehouseListViewModel.AddWarehouse = () =>
@@ -82,6 +91,10 @@ namespace WarehouseManagerApp.ViewModels
         [ObservableProperty]
         private string currentPageTitle = "Inventory Management";
 
+        //show add product form
+        [ObservableProperty]
+        private bool showAddProductForm = false;
+
         //show add warehouse form
         [ObservableProperty]
         private bool showAddWarehouseForm = false;
@@ -124,6 +137,12 @@ namespace WarehouseManagerApp.ViewModels
         {
             ShowAddWarehouseForm = false;
             AddWarehouseViewModel.ClearForm();
+        }
+
+        [RelayCommand]
+        private void CloseAddProductForm()
+        {
+            ShowAddProductForm = false;
         }
     }
 }

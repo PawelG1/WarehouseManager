@@ -13,6 +13,8 @@ namespace WarehouseManagerApp.ViewModels
     {
         private readonly IWarehousesService _warehouseService;
 
+        public Action? AddProduct { get; set; }
+
         public ProductListViewModel(IWarehousesService warehouseService)
         {
             _warehouseService = warehouseService;
@@ -153,34 +155,62 @@ namespace WarehouseManagerApp.ViewModels
             ProductsCount = Products.Count;
         }
 
-        //delete selected product
-        [RelayCommand(CanExecute = nameof(CanDeleteProduct))]
-        private async Task DeleteProductAsync()
+        //delete product
+        [RelayCommand]
+        private async Task DeleteProduct(Product? product)
         {
-            if (SelectedProduct == null) return;
+            if (product == null) return;
 
-            try
+            // Confirmation dialog
+            var result = System.Windows.MessageBox.Show(
+                $"Are you sure you want to delete product '{product.Name}'?\n\n" +
+                $"SKU: {product.SKU}\n" +
+                $"Warehouse: {product.Warehouse?.Name}\n\n" +
+                $"This action cannot be undone!",
+                "Confirm Delete",
+                System.Windows.MessageBoxButton.YesNo,
+                System.Windows.MessageBoxImage.Warning);
+
+            if (result == System.Windows.MessageBoxResult.Yes)
             {
-                await _warehouseService.DeleteProductAsync(SelectedProduct.Id);
-                await LoadProductsAsync(); //refresh product list
-                SelectedProduct = null; //clear selection
-            }
-            catch (Exception ex)
-            {
-                ErrorMessage = $"Error deleting product: {ex.Message}";
-                HasError = true;
+                IsLoading = true;
+
+                try
+                {
+                    await _warehouseService.DeleteProductAsync(product.Id);
+                    await LoadProductsAsync(); //refresh product list
+
+                    System.Windows.MessageBox.Show(
+                        $"Product '{product.Name}' has been deleted successfully!",
+                        "Success",
+                        System.Windows.MessageBoxButton.OK,
+                        System.Windows.MessageBoxImage.Information);
+                }
+                catch (Exception ex)
+                {
+                    ErrorMessage = $"Error deleting product: {ex.Message}";
+                    HasError = true;
+                    
+                    System.Windows.MessageBox.Show(
+                        $"Error deleting product: {ex.Message}",
+                        "Error",
+                        System.Windows.MessageBoxButton.OK,
+                        System.Windows.MessageBoxImage.Error);
+                }
+                finally
+                {
+                    IsLoading = false;
+                }
             }
         }
 
-        private bool CanDeleteProduct() => SelectedProduct != null;
-
-        //edit selected product
-        [RelayCommand(CanExecute = nameof(CanEditProduct))]
-        private void EditProduct()
+        //edit product
+        [RelayCommand]
+        private void EditProduct(Product? product)
         {
-            if (SelectedProduct == null) return;
+            if (product == null) return;
             
-            var editWindow = new Views.EditProductWindow(SelectedProduct.Id);
+            var editWindow = new Views.EditProductWindow(product.Id);
             editWindow.Owner = System.Windows.Application.Current.MainWindow;
             
             if (editWindow.ShowDialog() == true)
@@ -190,7 +220,12 @@ namespace WarehouseManagerApp.ViewModels
             }
         }
 
-        private bool CanEditProduct() => SelectedProduct != null;
+        //add product
+        [RelayCommand]
+        private void AddProductClick()
+        {
+            AddProduct?.Invoke();
+        }
 
         [RelayCommand]
         private void ClearSearch()
