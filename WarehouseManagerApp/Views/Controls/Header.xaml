@@ -52,7 +52,7 @@
                 Margin="10,5"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Center"
-                Content="{Binding SelectedPage}"
+                Content="{Binding DataContext.CurrentPageTitle, RelativeSource={RelativeSource AncestorType=Window}}"
                 FontSize="20"
                 FontWeight="Bold"
                 Foreground="White" />

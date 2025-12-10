@@ -1,6 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using System.Configuration;
-using System.Data;
 using System.Windows;
 using WarehouseManagerApp.Data;
 using WarehouseManagerApp.Services;
@@ -41,6 +39,7 @@ namespace WarehouseManagerApp
             //register ViewModels
             services.AddTransient<ProductListViewModel>();
             services.AddTransient<AddProductViewModel>();
+            services.AddTransient<MainWindowViewModel>();
             //register windows
             services.AddSingleton<MainWindow>();
         }

@@ -22,19 +22,82 @@
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="0.15*" />
-                <ColumnDefinition Width="0.25*" />
-                <ColumnDefinition Width="0.6*" />
+                <ColumnDefinition Width="0.85*" />
             </Grid.ColumnDefinitions>
 
             <!--  navigation bar on the left side of the screen  -->
             <Controls:NavBarControl Grid.Column="0" />
 
-            <!--  Products List  -->
-            <Controls:ProductsList x:Name="ProductsListControl" Grid.Column="2" />
+            <!--  - content  -->
+            <Grid Grid.Column="1">
 
-            <!--  Add Product Form  -->
-            <Controls:AddProductControl x:Name="AddProductControl" Grid.Column="1" />
+                <!--  dashboard  -->
+                <Grid>
+                    <Grid.Style>
+                        <Style TargetType="Grid">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding CurrentView}" Value="Dashboard">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Grid.Style>
+                    <TextBlock Text="Coming Soon..." />
+                </Grid>
+                <!--  dashbaord  -->
 
+                <!--  inventory view  -->
+                <Grid>
+                    <Grid.Style>
+                        <Style TargetType="Grid">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding CurrentView}" Value="Inventory">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Grid.Style>
+                    <Controls:ProductsList x:Name="ProductsListControl" />
+                    <Controls:AddProductControl x:Name="AddProductControl" Visibility="Collapsed" />
+                </Grid>
+                <!--  inventory END  -->
+
+                <!--  Warehouses  -->
+                <Grid>
+                    <Grid.Style>
+                        <Style TargetType="Grid">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding CurrentView}" Value="Warehouses">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Grid.Style>
+                    <Controls:WarehousesList />
+                </Grid>
+                <!--  Warehouses END  -->
+
+                <!--  about section  -->
+                <Grid>
+                    <Grid.Style>
+                        <Style TargetType="Grid">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding CurrentView}" Value="About">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Grid.Style>
+                    <Controls:AboutControl />
+                </Grid>
+                <!--  About section END  -->
+
+            </Grid>
+            <!--  content END  -->
         </Grid>
 
     </Grid>
