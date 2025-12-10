@@ -30,6 +30,8 @@ namespace WarehouseManagerApp
             AddProductControl.DataContext = viewModel.AddProductViewModel;
             ProductsListControl.DataContext = viewModel.ProductListViewModel;
             WarehousesListControl.DataContext = viewModel.WarehouseListViewModel;
+            AddWarehouseControl.DataContext = viewModel.AddWarehouseViewModel;
+            EditWarehouseControl.DataContext = viewModel.EditWarehouseViewModel;
         }
     }
 }

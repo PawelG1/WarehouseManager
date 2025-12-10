@@ -80,7 +80,7 @@
                                     <Button
                                         Margin="0,0,5,0"
                                         Padding="10,5"
-                                        Command="{Binding DataContext.EditWarehouseCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                        Command="{Binding DataContext.EditWarehouseClickCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                         CommandParameter="{Binding}"
                                         Content="Edit"
                                         FontSize="12">
@@ -148,7 +148,7 @@
             <Button
                 Padding="15,10"
                 HorizontalAlignment="Left"
-                Command="{Binding AddWarehouseCommand}"
+                Command="{Binding AddWarehouseClickCommand}"
                 Content="➕ Add New Warehouse"
                 FontSize="14"
                 FontWeight="Medium">
