@@ -13,7 +13,6 @@ namespace WarehouseManagerApp.Services
     public class WarehousesService : IWarehousesService
     {
         private readonly WarehouseContext _context;
-
         //cache
         private List<Product>? _productsCache;
         private DateTime? _productsCacheTime;
