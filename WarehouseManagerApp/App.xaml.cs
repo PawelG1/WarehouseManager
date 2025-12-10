@@ -39,6 +39,9 @@ namespace WarehouseManagerApp
             //register ViewModels
             services.AddTransient<ProductListViewModel>();
             services.AddTransient<AddProductViewModel>();
+            services.AddTransient<WarehouseListViewModel>();
+            services.AddTransient<AddWarehouseViewModel>();
+            services.AddTransient<EditWarehouseViewModel>();
             services.AddTransient<MainWindowViewModel>();
             //register windows
             services.AddSingleton<MainWindow>();

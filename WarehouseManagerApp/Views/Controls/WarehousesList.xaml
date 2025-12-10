@@ -9,6 +9,192 @@
     d:DesignWidth="800"
     mc:Ignorable="d">
     <Grid>
-        <TextBlock Text="Warehouses managment" />
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!--  Header with counter  -->
+        <Border
+            Grid.Row="0"
+            Padding="15"
+            Background="#004d73"
+            BorderBrush="#003d5c"
+            BorderThickness="0,0,0,2">
+            <TextBlock
+                FontSize="18"
+                FontWeight="Bold"
+                Foreground="White">
+                Warehouses: <Run Text="{Binding Warehouses.Count, Mode=OneWay}" />
+            </TextBlock>
+        </Border>
+
+        <!--  ListView with warehouses  -->
+        <ListView
+            Grid.Row="1"
+            Margin="10"
+            ItemsSource="{Binding Warehouses}"
+            SelectedItem="{Binding SelectedWarehouse}"
+            Background="#F5F5F5"
+            BorderThickness="0">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Name" Width="200">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock
+                                    FontSize="14"
+                                    FontWeight="Bold"
+                                    Text="{Binding Name}" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+                    <GridViewColumn Header="Location" Width="300">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock
+                                    FontSize="14"
+                                    Text="{Binding Location}" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+                    <GridViewColumn Header="Capacity (m³)" Width="120">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock
+                                    FontSize="14"
+                                    HorizontalAlignment="Right"
+                                    Text="{Binding CapacityM3, StringFormat={}{0:N0}}" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+                    <GridViewColumn Header="Actions" Width="250">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <!--  Edit Button  -->
+                                    <Button
+                                        Margin="0,0,5,0"
+                                        Padding="10,5"
+                                        Command="{Binding DataContext.EditWarehouseClickCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                        CommandParameter="{Binding}"
+                                        Content="Edit"
+                                        FontSize="12">
+                                        <Button.Style>
+                                            <Style TargetType="Button">
+                                                <Setter Property="Background" Value="#4CAF50" />
+                                                <Setter Property="Foreground" Value="White" />
+                                                <Setter Property="BorderThickness" Value="0" />
+                                                <Setter Property="Cursor" Value="Hand" />
+                                                <Style.Resources>
+                                                    <Style TargetType="Border">
+                                                        <Setter Property="CornerRadius" Value="3" />
+                                                    </Style>
+                                                </Style.Resources>
+                                                <Style.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter Property="Background" Value="#45A049" />
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
+
+                                    <!--  Delete Button  -->
+                                    <Button
+                                        Padding="10,5"
+                                        Command="{Binding DataContext.DeleteWarehouseCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                        CommandParameter="{Binding}"
+                                        Content="Delete"
+                                        FontSize="12">
+                                        <Button.Style>
+                                            <Style TargetType="Button">
+                                                <Setter Property="Background" Value="#F44336" />
+                                                <Setter Property="Foreground" Value="White" />
+                                                <Setter Property="BorderThickness" Value="0" />
+                                                <Setter Property="Cursor" Value="Hand" />
+                                                <Style.Resources>
+                                                    <Style TargetType="Border">
+                                                        <Setter Property="CornerRadius" Value="3" />
+                                                    </Style>
+                                                </Style.Resources>
+                                                <Style.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter Property="Background" Value="#D32F2F" />
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
+                                </StackPanel>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+        <!--  Bottom bar with Add button  -->
+        <Border
+            Grid.Row="2"
+            Padding="15"
+            Background="#F5F5F5"
+            BorderBrush="#DDDDDD"
+            BorderThickness="0,1,0,0">
+            <Button
+                Padding="15,10"
+                HorizontalAlignment="Left"
+                Command="{Binding AddWarehouseClickCommand}"
+                Content="➕ Add New Warehouse"
+                FontSize="14"
+                FontWeight="Medium">
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="Background" Value="#004d73" />
+                        <Setter Property="Foreground" Value="White" />
+                        <Setter Property="BorderThickness" Value="0" />
+                        <Setter Property="Cursor" Value="Hand" />
+                        <Style.Resources>
+                            <Style TargetType="Border">
+                                <Setter Property="CornerRadius" Value="5" />
+                            </Style>
+                        </Style.Resources>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="RoyalBlue" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+        </Border>
+
+        <!--  Loading Indicator  -->
+        <Grid
+            Grid.Row="0"
+            Grid.RowSpan="3"
+            Background="#80000000">
+            <Grid.Style>
+                <Style TargetType="Grid">
+                    <Setter Property="Visibility" Value="Collapsed" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsLoading}" Value="True">
+                            <Setter Property="Visibility" Value="Visible" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Grid.Style>
+            <TextBlock
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                FontSize="20"
+                FontWeight="Bold"
+                Foreground="White"
+                Text="Loading..." />
+        </Grid>
     </Grid>
 </UserControl>

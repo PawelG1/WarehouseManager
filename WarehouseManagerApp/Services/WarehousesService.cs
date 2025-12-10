@@ -13,7 +13,6 @@ namespace WarehouseManagerApp.Services
     public class WarehousesService : IWarehousesService
     {
         private readonly WarehouseContext _context;
-
         //cache
         private List<Product>? _productsCache;
         private DateTime? _productsCacheTime;
@@ -190,6 +189,54 @@ namespace WarehouseManagerApp.Services
             
             _productsCache = null;
             _productsCacheTime = null;
+        }
+
+        public async Task<Warehouse?> GetWarehouseByIdAsync(int id)
+        {
+            return await _context.Warehouses
+                .AsNoTracking()
+                .FirstOrDefaultAsync(w => w.Id == id);
+        }
+
+        public async Task AddWarehouseAsync(Warehouse warehouse)
+        {
+            await _context.Warehouses.AddAsync(warehouse);
+            await _context.SaveChangesAsync();
+
+            _warehousesCache = null;
+            _warehousesCacheTime = null;
+        }
+
+        public async Task UpdateWarehouseAsync(Warehouse warehouse)
+        {
+            _context.ChangeTracker.Clear();
+
+            _context.Warehouses.Update(warehouse);
+            await _context.SaveChangesAsync();
+
+            _warehousesCache = null;
+            _warehousesCacheTime = null;
+        }
+
+        public async Task DeleteWarehouseAsync(int id)
+        {
+            var warehouse = await _context.Warehouses
+                .Include(w => w.Products)
+                .FirstOrDefaultAsync(w => w.Id == id);
+
+            if (warehouse != null)
+            {
+                // Remove all products first
+                _context.Products.RemoveRange(warehouse.Products);
+                
+                _context.Warehouses.Remove(warehouse);
+                await _context.SaveChangesAsync();
+
+                _warehousesCache = null;
+                _warehousesCacheTime = null;
+                _productsCache = null;
+                _productsCacheTime = null;
+            }
         }
     }
 }

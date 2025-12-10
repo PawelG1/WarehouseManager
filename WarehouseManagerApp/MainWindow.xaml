@@ -76,7 +76,50 @@
                             </Style.Triggers>
                         </Style>
                     </Grid.Style>
-                    <Controls:WarehousesList />
+                    
+                    <Controls:WarehousesList x:Name="WarehousesListControl" />
+                    
+                    <!--  Add Warehouse Form Overlay  -->
+                    <Grid Background="#CC000000">
+                        <Grid.Style>
+                            <Style TargetType="Grid">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ShowAddWarehouseForm}" Value="True">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Grid.Style>
+                        <Grid
+                            Width="600"
+                            Height="500"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Center">
+                            <Controls:AddWarehouseControl x:Name="AddWarehouseControl" />
+                        </Grid>
+                    </Grid>
+
+                    <!--  Edit Warehouse Form Overlay  -->
+                    <Grid Background="#CC000000">
+                        <Grid.Style>
+                            <Style TargetType="Grid">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ShowEditWarehouseForm}" Value="True">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Grid.Style>
+                        <Grid
+                            Width="600"
+                            Height="500"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Center">
+                            <Controls:EditWarehouseControl x:Name="EditWarehouseControl" />
+                        </Grid>
+                    </Grid>
                 </Grid>
                 <!--  Warehouses END  -->
 
