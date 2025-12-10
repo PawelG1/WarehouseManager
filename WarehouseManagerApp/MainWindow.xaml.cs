@@ -19,16 +19,18 @@ namespace WarehouseManagerApp
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow(AddProductViewModel addProductViewModel, ProductListViewModel productListViewModel)
+        public MainWindow(MainWindowViewModel viewModel)
         {
             InitializeComponent();
+
+            //set main window datacontext
+            DataContext = viewModel;
+
+            //set datacontext for controls
+            AddProductControl.DataContext = viewModel.AddProductViewModel;
+            ProductsListControl.DataContext = viewModel.ProductListViewModel;
             
-            //set datacontext for both controls
-            AddProductControl.DataContext = addProductViewModel;
-            ProductsListControl.DataContext = productListViewModel;
-            
-            //hook up the callback
-            addProductViewModel.OnProductAdded = async () => await productListViewModel.LoadProductsAsync();
+           
         }
     }
 }
