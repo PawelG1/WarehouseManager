@@ -72,6 +72,46 @@
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
 
+                    <GridViewColumn Header="Used (m³)" Width="100">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock
+                                    FontSize="14"
+                                    HorizontalAlignment="Right"
+                                    Text="{Binding UsedSpaceM3, Mode=OneWay, StringFormat={}{0:F1}}" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+                    <GridViewColumn Header="Usage %" Width="80">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock
+                                    FontSize="14"
+                                    HorizontalAlignment="Right"
+                                    Text="{Binding UtilizationPercentage, Mode=OneWay, StringFormat={}{0:F1}%}">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="Foreground" Value="Green" />
+                                            <Style.Triggers>
+                                                <!-- Near capacity - orange -->
+                                                <DataTrigger Binding="{Binding IsNearCapacity}" Value="True">
+                                                    <Setter Property="Foreground" Value="Orange" />
+                                                    <Setter Property="FontWeight" Value="SemiBold" />
+                                                </DataTrigger>
+                                                <!-- Critical capacity - red -->
+                                                <DataTrigger Binding="{Binding IsCriticalCapacity}" Value="True">
+                                                    <Setter Property="Foreground" Value="Red" />
+                                                    <Setter Property="FontWeight" Value="Bold" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
                     <GridViewColumn Header="Actions" Width="250">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>

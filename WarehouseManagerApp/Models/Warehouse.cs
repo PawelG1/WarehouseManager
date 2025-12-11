@@ -27,5 +27,16 @@ namespace WarehouseManagerApp.Models
         public int CapacityM3 { get; set; }
 
         public List<Product> Products { get; set; } = new();
+
+        // Calculated properties for space utilization
+        public double UsedSpaceM3 => Products?.Sum(p => p.Quantity * p.VolumePerUnitM3) ?? 0;
+        
+        public double FreeSpaceM3 => CapacityM3 - UsedSpaceM3;
+        
+        public double UtilizationPercentage => CapacityM3 > 0 ? (UsedSpaceM3 / CapacityM3) * 100 : 0;
+        
+        public bool IsNearCapacity => UtilizationPercentage >= 80;
+        
+        public bool IsCriticalCapacity => UtilizationPercentage >= 95;
     }
 }

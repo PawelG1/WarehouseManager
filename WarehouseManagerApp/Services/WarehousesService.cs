@@ -177,6 +177,7 @@ namespace WarehouseManagerApp.Services
             }
 
             _warehousesCache = await _context.Warehouses
+                .Include(w => w.Products) // Include products for space calculations
                 .ToListAsync();
 
             _warehousesCacheTime = DateTime.Now;
