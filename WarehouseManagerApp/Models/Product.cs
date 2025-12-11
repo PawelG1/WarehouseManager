@@ -13,6 +13,8 @@ namespace WarehouseManagerApp.Models
 
         [Required(ErrorMessage = "Product name is required")]
         [StringLength(200, MinimumLength = 3, ErrorMessage = "Product name must be between 3 and 200 characters")]
+        //[RegularExpression(@"^[A-Za-zÀ-ž0-9 _\-]+$", ErrorMessage = "Product name can contain only letter, digits, spaces, hyphens and underscore.")]
+        [RegularExpression(@"^[^!@#$%^&*(){}\[\]<>?/\\]+$", ErrorMessage = "Product name contains some forbbiden characters")]
         public string Name { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "SKU is required")]

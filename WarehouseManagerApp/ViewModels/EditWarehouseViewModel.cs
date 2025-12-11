@@ -1,6 +1,9 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Threading.Tasks;
 using WarehouseManagerApp.Models;
 using WarehouseManagerApp.Services;
@@ -89,24 +92,22 @@ namespace WarehouseManagerApp.ViewModels
         {
             ClearMessages();
 
-            // Validation
-            if (string.IsNullOrWhiteSpace(Name) || Name.Length < 3)
+            // Create warehouse object for validation
+            var warehouse = new Warehouse
             {
-                ValidationError = "Warehouse name must be at least 3 characters";
-                HasValidationError = true;
-                return;
-            }
+                Id = WarehouseId,
+                Name = Name.Trim(),
+                Location = Location.Trim(),
+                CapacityM3 = CapacityM3
+            };
 
-            if (string.IsNullOrWhiteSpace(Location) || Location.Length < 5)
-            {
-                ValidationError = "Location must be at least 5 characters";
-                HasValidationError = true;
-                return;
-            }
+            // Validate using data annotations
+            var validationContext = new System.ComponentModel.DataAnnotations.ValidationContext(warehouse);
+            var validationResults = new List<System.ComponentModel.DataAnnotations.ValidationResult>();
 
-            if (CapacityM3 <= 0)
+            if (!System.ComponentModel.DataAnnotations.Validator.TryValidateObject(warehouse, validationContext, validationResults, true))
             {
-                ValidationError = "Capacity must be greater than 0";
+                ValidationError = string.Join("\n", validationResults.Select(r => r.ErrorMessage));
                 HasValidationError = true;
                 return;
             }
@@ -115,14 +116,6 @@ namespace WarehouseManagerApp.ViewModels
 
             try
             {
-                var warehouse = new Warehouse
-                {
-                    Id = WarehouseId,
-                    Name = Name.Trim(),
-                    Location = Location.Trim(),
-                    CapacityM3 = CapacityM3
-                };
-
                 await _warehouseService.UpdateWarehouseAsync(warehouse);
 
                 SuccessMessage = "Warehouse updated successfully!";
