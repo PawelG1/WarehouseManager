@@ -1,4 +1,4 @@
-<Window
+﻿<Window
     x:Class="WarehouseManagerApp.Views.EditProductWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -7,7 +7,9 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="Edit Product"
     Width="450"
-    Height="550"
+    MinHeight="550"
+    MaxHeight="700"
+    SizeToContent="Height"
     ResizeMode="NoResize"
     WindowStartupLocation="CenterOwner"
     mc:Ignorable="d">
@@ -156,7 +158,7 @@
                 <TextBlock
                     Margin="0,0,0,5"
                     FontWeight="SemiBold"
-                    Text="Volume per Unit (m?):" />
+                    Text="Volume per Unit (m³):" />
                 <TextBox
                     Padding="5"
                     Style="{StaticResource DisableWhenLoadingTextBox}"
@@ -165,6 +167,7 @@
                     Margin="0,2,0,0"
                     FontSize="10"
                     Foreground="#666666"
+                    TextWrapping="Wrap"
                     Text="How much space (in cubic meters) does one unit of this product occupy? Use dot (.) as decimal separator." />
             </StackPanel>
 
