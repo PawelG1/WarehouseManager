@@ -62,6 +62,8 @@ namespace WarehouseManagerApp.ViewModels
             {
                 ShowAddWarehouseForm = false;
                 await warehouseListViewModel.LoadWarehousesAsync();
+                // REFRESH warehouses list in AddProduct form as well
+                await addProductViewModel.RefreshWarehousesAsync();
             };
 
             //hook up callback - when warehouse is updated successfully
@@ -69,6 +71,8 @@ namespace WarehouseManagerApp.ViewModels
             {
                 ShowEditWarehouseForm = false;
                 await warehouseListViewModel.LoadWarehousesAsync();
+                // REFRESH warehouses list in AddProduct form as well
+                await addProductViewModel.RefreshWarehousesAsync();
             };
 
             //hook up callback - when edit is cancelled
