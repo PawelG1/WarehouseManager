@@ -67,7 +67,7 @@
                                 <TextBlock
                                     FontSize="14"
                                     HorizontalAlignment="Right"
-                                    Text="{Binding CapacityM3, StringFormat={}{0:N0}}" />
+                                    Text="{Binding CapacityM3, StringFormat={}{0:#}}" />
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
