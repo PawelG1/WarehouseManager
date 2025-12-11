@@ -2,7 +2,7 @@
 
 A modern desktop application for managing warehouse inventory built with WPF and .NET 8.
 
-![Main Dashboard](docs.screenshots\dashboard.png)
+![Main Dashboard](docs.screenshots/dashboard.png)
 
 ## Overview
 
@@ -37,7 +37,7 @@ Validation is implemented using:
 - Data annotations (`[Required]`, `[Range]`, etc.)
 - Custom validation logic in ViewModels
 
-![Form Validation](docs.screenshots\validation.png)
+![Form Validation](docs.screenshots/validation.png)
 
 ### CRUD Operations
 Complete CRUD functionality for both Products and Warehouses:
@@ -83,7 +83,7 @@ Example error scenarios handled:
 - Duplicate SKU entries
 - Deletion of warehouses with products
 
-![Destructive operation confirmation](docs.screenshots\error_handling.png)
+![Destructive operation confirmation](docs.screenshots/error_handling.png)
 
 ### Dependency Injection
 The application uses **Microsoft.Extensions.DependencyInjection**:
@@ -112,7 +112,7 @@ services.AddTransient<DashboardViewModel>();
 - **Low Stock Alerts** - List of products below minimum quantity
 - **Real-time Data** - Refresh button to update all statistics
 
-![Dashboard](docs.screenshots\dashboard.png)
+![Dashboard](docs.screenshots/dashboard.png)
 
 ### Product Management
 - Add products with name, SKU, quantity, price, dimensions, and minimum stock level
@@ -123,7 +123,7 @@ services.AddTransient<DashboardViewModel>();
 - View low stock indicators (red text for items below minimum)
 - Automatic warehouse association
 
-![Product Management](docs.screenshots\inventory.png)
+![Product Management](docs.screenshots/inventory.png)
 
 ### Warehouse Management
 - Create warehouses with name, location, and capacity (m³)
@@ -132,7 +132,7 @@ services.AddTransient<DashboardViewModel>();
 - View current products count per warehouse
 - See capacity utilization
 
-![Warehouse Management](docs.screenshots\Warehouses.png)
+![Warehouse Management](docs.screenshots/Warehouses.png)
 
 ---
 

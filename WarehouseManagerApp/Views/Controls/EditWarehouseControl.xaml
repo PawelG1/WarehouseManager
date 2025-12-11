@@ -5,7 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:WarehouseManagerApp.Views.Controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    d:DesignHeight="450"
+    d:DesignHeight="550"
     d:DesignWidth="600"
     mc:Ignorable="d">
     <Border
@@ -35,8 +35,8 @@
             <StackPanel Grid.Row="1" Margin="0,0,0,10">
                 <!--  Success Message  -->
                 <Border
-                    Padding="10"
                     Margin="0,0,0,5"
+                    Padding="10"
                     Background="#E8F5E9"
                     BorderBrush="#4CAF50"
                     BorderThickness="1"
@@ -60,8 +60,8 @@
 
                 <!--  Error Message  -->
                 <Border
-                    Padding="10"
                     Margin="0,0,0,5"
+                    Padding="10"
                     Background="#FFEBEE"
                     BorderBrush="#F44336"
                     BorderThickness="1"

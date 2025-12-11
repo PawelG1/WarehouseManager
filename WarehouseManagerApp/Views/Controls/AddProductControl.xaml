@@ -211,12 +211,12 @@
                 <TextBox
                     Padding="5"
                     Style="{StaticResource DisableWhenLoadingTextBox}"
-                    Text="{Binding VolumePerUnitM3, UpdateSourceTrigger=PropertyChanged}" />
+                    Text="{Binding VolumePerUnitM3, UpdateSourceTrigger=PropertyChanged, StringFormat=F2, ConverterCulture=en-US}" />
                 <TextBlock
                     Margin="0,2,0,0"
                     FontSize="10"
                     Foreground="#666666"
-                    Text="How much space (in cubic meters) does one unit of this product occupy?" />
+                    Text="How much space (in cubic meters) does one unit of this product occupy? Use dot (.) as decimal separator." />
             </StackPanel>
 
             <StackPanel Grid.Row="7" Margin="0,0,0,20">

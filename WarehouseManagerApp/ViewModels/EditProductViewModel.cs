@@ -163,5 +163,24 @@ namespace WarehouseManagerApp.ViewModels
             HasError = false;
             HasValidationError = false;
         }
+
+        // Public method to refresh warehouses list when a new warehouse is added
+        public async Task RefreshWarehousesAsync()
+        {
+            try
+            {
+                IsLoading = true;
+                Warehouses = await _warehouseService.GetWarehousesAsync();
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage = $"Error loading warehouses: {ex.Message}";
+                HasError = true;
+            }
+            finally
+            {
+                IsLoading = false;
+            }
+        }
     }
 }

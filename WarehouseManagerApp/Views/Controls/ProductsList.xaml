@@ -151,11 +151,12 @@
             Margin="10"
             ItemsSource="{Binding Products}"
             SelectedItem="{Binding SelectedProduct}"
+            IsSynchronizedWithCurrentItem="True"
             Background="#F5F5F5"
             BorderThickness="0">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Name" Width="180">
+                    <GridViewColumn Header="Name" Width="180" >
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock

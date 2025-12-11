@@ -20,6 +20,12 @@ namespace WarehouseManagerApp.ViewModels
             LoadWarehousesAsync();
         }
 
+        // Public method to refresh warehouses list when a new warehouse is added
+        public async Task RefreshWarehousesAsync()
+        {
+            await LoadWarehousesAsync();
+        }
+
         [ObservableProperty]
         private string name = string.Empty;
 
